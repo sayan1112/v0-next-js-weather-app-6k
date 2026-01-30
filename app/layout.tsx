@@ -9,8 +9,8 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Weather App - Real-Time Weather Information',
-  description: 'Get accurate real-time weather information, 5-day forecasts, and location-based weather updates.',
+  title: 'Sayanocast | Meteorological Intelligence',
+  description: 'A premium, futuristic weather platform crafted by Sayan, providing real-time global intelligence and 3D visualizations.',
   generator: 'v0.app',
   icons: {
     icon: [
