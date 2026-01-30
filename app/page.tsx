@@ -421,86 +421,151 @@ export default function Home() {
                   </div>
                 </motion.div>
               ) : (
-                <div className="glass-card h-full min-h-[500px] rounded-[2rem] flex flex-col items-center justify-center p-8 text-center space-y-6 border-white/5 shadow-xl relative overflow-hidden">
-                   {isLoading ? (
-                      <div className="flex flex-col items-center gap-8">
-                         <div className="relative">
-                            <Loader2 className="w-32 h-32 text-primary animate-spin" />
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <Activity className="w-12 h-12 text-blue-400" />
+                <div className="space-y-6">
+                  <div className="glass-card min-h-[500px] rounded-[2rem] flex flex-col items-center justify-center p-12 text-center space-y-8 border-white/5 shadow-2xl relative overflow-hidden bg-gradient-to-b from-transparent to-primary/5">
+                    {/* Background Radar FX */}
+                    <div className="absolute inset-0 z-0 opacity-5 pointer-events-none">
+                      <div className="absolute inset-0 border border-primary rounded-full scale-[1.5] animate-pulse" />
+                      <div className="absolute inset-0 border border-primary rounded-full scale-[2.5]" />
+                      <div className="absolute top-1/2 left-0 w-full h-[1px] bg-primary" />
+                      <div className="absolute top-0 left-1/2 w-[1px] h-full bg-primary" />
+                    </div>
+
+                    {isLoading ? (
+                       <div className="flex flex-col items-center gap-12 relative z-10">
+                          <div className="relative">
+                             <div className="absolute inset-[-20px] bg-primary/20 blur-3xl rounded-full animate-pulse" />
+                             <Loader2 className="w-40 h-40 text-primary animate-spin" />
+                             <div className="absolute inset-0 flex items-center justify-center">
+                                 <Activity className="w-16 h-16 text-blue-400 animate-pulse" />
+                             </div>
+                          </div>
+                          <div className="space-y-4">
+                             <p className="text-xl font-black uppercase tracking-[1em] text-primary italic animate-shimmer">Synchronizing Aether Core</p>
+                             <div className="flex justify-center gap-3">
+                                {[1, 2, 3].map(i => (
+                                  <div key={i} className="h-1 w-8 bg-primary/20 rounded-full overflow-hidden">
+                                    <motion.div 
+                                      animate={{ x: [-32, 32] }}
+                                      transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
+                                      className="h-full w-4 bg-primary"
+                                    />
+                                  </div>
+                                ))}
+                             </div>
+                             <p className="text-[10px] text-white/20 uppercase tracking-widest mt-6 font-bold">Establishing secure orbital link • Protocol Alpha-7</p>
+                          </div>
+                       </div>
+                    ) : (
+                       <motion.div 
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="flex flex-col items-center gap-10 relative z-10"
+                       >
+                         <div className="w-40 h-40 bg-primary/5 rounded-[4rem] flex items-center justify-center border border-white/10 shadow-[0_0_100px_rgba(59,130,246,0.1)] group cursor-pointer hover:border-primary/50 transition-all duration-700">
+                           <div className="relative">
+                              <div className="absolute inset-0 bg-primary blur-3xl opacity-0 group-hover:opacity-40 transition-opacity" />
+                              <Wind className="w-20 h-20 text-primary group-hover:scale-110 transition-transform duration-700" />
+                           </div>
+                         </div>
+                         <div className="space-y-6">
+                           <div className="flex flex-col items-center gap-2">
+                             <span className="text-[10px] font-black tracking-[0.6em] text-primary uppercase italic">System Status: Standby</span>
+                             <h3 className="text-5xl font-black italic uppercase tracking-tighter text-white">Intelligence Ready</h3>
+                           </div>
+                           <p className="text-white/30 max-w-[340px] mx-auto font-bold uppercase text-[11px] tracking-[0.3em] leading-relaxed">
+                             Awaiting geospatial coordinate input. <br />
+                             Select a point on the globe or use the tactical search terminal to initiate sync.
+                           </p>
+                         </div>
+                         <div className="flex gap-6 items-center">
+                            <div className="flex gap-2">
+                               <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                               <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse delay-75" />
+                               <div className="h-2 w-2 rounded-full bg-white/10 border border-white/5" />
                             </div>
+                            <span className="text-[8px] font-mono text-white/20 uppercase tracking-widest">Core-Link: SECURE</span>
                          </div>
-                         <div>
-                            <p className="text-[13px] font-black uppercase tracking-[0.8em] text-primary italic">Synchronizing Aether Core...</p>
-                            <p className="text-[10px] text-white/20 uppercase tracking-widest mt-4">Establishing secure orbital link</p>
-                         </div>
-                      </div>
-                   ) : (
-                      <>
-                        <div className="w-32 h-32 bg-primary/10 rounded-[3rem] flex items-center justify-center border border-primary/20 shadow-[0_0_80px_rgba(59,130,246,0.3)] group cursor-pointer hover:border-primary/50 transition-all">
-                          <Wind className="w-16 h-16 text-primary group-hover:scale-110 transition-transform" />
-                        </div>
-                        <div className="space-y-6">
-                          <h3 className="text-4xl font-black italic uppercase tracking-tighter">Intelligence Ready</h3>
-                          <p className="text-white/30 max-w-[320px] mx-auto font-black uppercase text-[11px] tracking-[0.4em] leading-relaxed">System standby. Awaiting geospatial coordinate input via globe terminal or tactical search.</p>
-                        </div>
-                        <div className="flex gap-4">
-                           <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                           <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse delay-75" />
-                           <div className="h-2 w-2 rounded-full bg-white/20" />
-                        </div>
-                      </>
-                   )}
+                       </motion.div>
+                    )}
+                  </div>
+
+                  {/* STANDBY METADATA FILL */}
+                  {!isLoading && (
+                    <div className="grid grid-cols-2 gap-4">
+                       <div className="glass-card p-6 rounded-3xl border-white/5 bg-white/5 flex flex-col gap-2">
+                          <span className="text-[8px] font-black uppercase tracking-widest text-white/20">Orbital Nodes</span>
+                          <span className="text-2xl font-black italic text-white/40 uppercase">Offline</span>
+                       </div>
+                       <div className="glass-card p-6 rounded-3xl border-white/5 bg-white/5 flex flex-col gap-2">
+                          <span className="text-[8px] font-black uppercase tracking-widest text-white/20">Data Stream</span>
+                          <div className="flex gap-1 h-6 items-end">
+                             {[1, 2, 3, 4, 5].map(i => (
+                               <div key={i} className="w-1 bg-white/5 rounded-full" style={{ height: '20%' }} />
+                             ))}
+                          </div>
+                       </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
           </div>
 
-          {/* THE ATMOSPHERIC BRIDGE - Fills the visual gap before the Hub */}
-          {data && (
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.98 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="relative py-12 px-10 glass-card rounded-[3rem] border-white/5 overflow-hidden shadow-2xl bg-gradient-to-br from-primary/5 via-transparent to-blue-900/5 mt-6"
-            >
-               <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary via-transparent to-primary/20" />
-               <div className="flex flex-col lg:flex-row items-center justify-between gap-12 relative z-10">
-                  <div className="max-w-xl space-y-4">
-                     <div className="flex items-center gap-3">
-                        <div className="p-2 bg-primary/20 rounded-lg">
-                           <Activity className="w-5 h-5 text-primary" />
-                        </div>
-                        <span className="text-xs font-black uppercase tracking-[0.5em] text-primary/60 italic">Regional Pulse</span>
+          {/* THE ATMOSPHERIC BRIDGE - Fills the visual gap */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.98 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className={`relative py-12 px-10 glass-card rounded-[3rem] border-white/5 overflow-hidden shadow-2xl transition-all duration-1000 mt-6 ${
+              data ? 'bg-gradient-to-br from-primary/5 via-transparent to-blue-900/5' : 'bg-white/5 opacity-50 grayscale'
+            }`}
+          >
+             <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary via-transparent to-primary/20" />
+             <div className="flex flex-col lg:flex-row items-center justify-between gap-12 relative z-10">
+                <div className="max-w-xl space-y-4">
+                   <div className="flex items-center gap-3">
+                      <div className={`p-2 rounded-lg ${data ? 'bg-primary/20' : 'bg-white/10'}`}>
+                         <Activity className={`w-5 h-5 ${data ? 'text-primary' : 'text-white/20'}`} />
+                      </div>
+                      <span className="text-xs font-black uppercase tracking-[0.5em] text-white/20 italic">
+                        {data ? 'Regional Pulse' : 'Global Surveillance Standby'}
+                      </span>
+                   </div>
+                   <h2 className={`text-4xl font-black italic tracking-tighter uppercase leading-tight ${data ? 'text-white' : 'text-white/20'}`}>
+                      {data ? (
+                        <>Deep-Space <span className="text-primary italic">Atmospheric Calibration</span> Successful</>
+                      ) : (
+                        <>Awaiting <span className="italic">Orbital Acquisition</span> Signature</>
+                      )}
+                   </h2>
+                   <p className="text-white/20 text-sm font-bold leading-relaxed uppercase tracking-wide">
+                      {data ? (
+                        `The current meteorological profile indicates a stable transition phase. Satellite telemetry (H-24) confirms orbital alignment over ${data.location.name}.`
+                      ) : (
+                        "Satellite network idling in geosynchronous orbit. Establishing handshake protocols for global moisture and thermal density mapping."
+                      )}
+                   </p>
+                </div>
+                
+                <div className="flex flex-wrap gap-10 lg:gap-20">
+                   {[
+                     { label: 'Cloud Density', val: data ? 'Low' : '---', sub: data ? '12% Coverage' : 'Awaiting Data' },
+                     { label: 'Barometric Trend', val: data ? 'Steady' : '---', sub: data ? '1013.2 hPa' : 'No Signal' },
+                     { label: 'Signal Latency', val: data ? '32ms' : '999ms', sub: data ? 'Secure' : 'Unlinked' }
+                   ].map((stat, i) => (
+                     <div key={i} className="flex flex-col gap-2">
+                        <span className="text-[8px] font-black tracking-[0.4em] text-white/20 uppercase">{stat.label}</span>
+                        <span className={`text-3xl font-black italic tracking-tighter uppercase leading-none ${data ? 'text-white' : 'text-white/10'}`}>{stat.val}</span>
+                        <span className="text-[10px] font-bold text-primary/40 uppercase tracking-widest">{stat.sub}</span>
                      </div>
-                     <h2 className="text-4xl font-black italic tracking-tighter uppercase leading-tight">
-                        Deep-Space <span className="text-primary italic">Atmospheric Calibration</span> Successful
-                     </h2>
-                     <p className="text-white/40 text-sm font-bold leading-relaxed uppercase tracking-wide">
-                        The current meteorological profile indicates a stable transition phase. 
-                        Satellite telemetry (H-24) confirms orbital alignment over {data.location.name}.
-                     </p>
-                  </div>
-                  
-                  <div className="flex flex-wrap gap-10 lg:gap-20">
-                     {[
-                       { label: 'Cloud Density', val: 'Low', sub: '12% Coverage' },
-                       { label: 'Barometric Trend', val: 'Steady', sub: '1013.2 hPa' },
-                       { label: 'Signal Latency', val: '32ms', sub: 'Secure' }
-                     ].map((stat, i) => (
-                       <div key={i} className="flex flex-col gap-2">
-                          <span className="text-[8px] font-black tracking-[0.4em] text-white/20 uppercase">{stat.label}</span>
-                          <span className="text-3xl font-black italic tracking-tighter text-white uppercase leading-none">{stat.val}</span>
-                          <span className="text-[10px] font-bold text-primary/60 uppercase tracking-widest">{stat.sub}</span>
-                       </div>
-                     ))}
-                  </div>
-               </div>
-               
-               {/* Decorative background grid */}
-               <div className="absolute inset-0 z-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
-            </motion.div>
-          )}
+                   ))}
+                </div>
+             </div>
+             
+             {/* Decorative background grid */}
+             <div className="absolute inset-0 z-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
+          </motion.div>
 
           {/* SECONDARY STRATEGIC ANALYSIS PANEL */}
           {data && (
