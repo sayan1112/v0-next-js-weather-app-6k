@@ -1,14 +1,19 @@
 'use client'
 
+import Image from 'next/image'
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Card, CardContent } from '@/components/ui/card'
-import { Activity, Camera, Plane, Navigation, CheckCircle2, AlertTriangle, XCircle } from 'lucide-react'
+import { Camera, Plane, Navigation, CheckCircle2, AlertTriangle, XCircle } from 'lucide-react'
 import { WeatherIntelligence, DecisionInsight } from '@/types/weather'
 
 interface SmartInsightsProps {
   insights: WeatherIntelligence['insights']
 }
+
+const RunningIcon = ({ className }: { className?: string }) => (
+  <Image src="/app-icon.png" alt="Running icon" width={20} height={20} className={`${className} object-cover rounded-md`} />
+)
 
 export function SmartInsights({ insights }: SmartInsightsProps) {
   const renderInsight = (key: string, data: DecisionInsight, Icon: any) => {
@@ -66,7 +71,7 @@ export function SmartInsights({ insights }: SmartInsightsProps) {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {renderInsight('running', insights.running, Activity)}
+      {renderInsight('running', insights.running, RunningIcon)}
       {renderInsight('photography', insights.photography, Camera)}
       {renderInsight('travel', insights.travel, Navigation)}
       {renderInsight('aviation', insights.aviation, Plane)}

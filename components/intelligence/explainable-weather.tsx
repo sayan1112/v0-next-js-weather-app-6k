@@ -1,9 +1,10 @@
 'use client'
+import Image from 'next/image'
 
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Info, ArrowRight, Activity, Zap, Wind } from 'lucide-react'
+import { Info, ArrowRight, Zap, Wind } from 'lucide-react'
 import { MeteorologicalExplanation } from '@/types/weather'
 
 interface ExplainableWeatherProps {
@@ -45,7 +46,7 @@ export function ExplainableWeather({ explanation }: ExplainableWeatherProps) {
             className="p-4 bg-white/5 rounded-2xl border border-white/5 flex flex-col gap-2"
           >
             <div className="flex items-center gap-2 text-orange-400">
-              <Activity className="w-4 h-4" />
+              <Image src="/app-icon.png" alt="Effect Icon" width={16} height={16} className="w-4 h-4 object-cover rounded-sm animate-pulse" />
               <span className="text-[10px] font-black uppercase tracking-widest">Observed Effect</span>
             </div>
             <p className="text-sm font-bold text-white/90 leading-snug break-words">{explanation.cause_effect.effect}</p>

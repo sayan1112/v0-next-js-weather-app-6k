@@ -1,11 +1,12 @@
 'use client'
 
+import Image from 'next/image'
 import React from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ForecastDay } from '@/types/weather'
 import { motion } from 'framer-motion'
-import { Activity, Zap } from 'lucide-react'
+import { Zap } from 'lucide-react'
 
 interface WeatherChartsProps {
   data: ForecastDay[]
@@ -34,8 +35,8 @@ export function WeatherCharts({ data }: WeatherChartsProps) {
           <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 blur-3xl rounded-full" />
           <CardHeader className="p-10 relative z-10 flex flex-row items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-primary/20 rounded-2xl">
-                 <Activity className="w-6 h-6 text-primary" />
+              <div className="p-3 bg-primary/20 rounded-2xl overflow-hidden">
+                 <Image src="/app-icon.png" alt="Thermal Icon" width={24} height={24} className="w-6 h-6 object-cover rounded-md" />
               </div>
               <CardTitle className="text-xl font-black uppercase italic tracking-tighter">Thermal Prediction (24H)</CardTitle>
             </div>

@@ -1,4 +1,5 @@
 'use client'
+import Image from 'next/image'
 
 import { motion } from 'framer-motion'
 import { Card, CardContent } from '@/components/ui/card'
@@ -14,8 +15,7 @@ import {
   Thermometer, 
   Waves,
   Navigation,
-  Sun,
-  Activity
+  Sun
 } from 'lucide-react'
 
 interface WeatherCardProps {
@@ -107,7 +107,13 @@ export function WeatherCard({ data }: WeatherCardProps) {
           <div className="mt-8 relative h-12 bg-white/5 rounded-xl border border-white/5 overflow-hidden flex items-center px-4 group">
             <div className="absolute inset-y-0 left-0 w-1 bg-primary animate-pulse" />
             <div className="flex items-center gap-3 w-full">
-               <Activity className="w-4 h-4 text-primary/40 animate-pulse" />
+               <Image 
+                src="/app-icon.png" 
+                alt="Scan Icon" 
+                width={16} 
+                height={16} 
+                className="w-4 h-4 object-cover rounded-sm animate-pulse"
+              />
                <div className="flex-1 h-[2px] bg-white/10 relative overflow-hidden">
                   <motion.div 
                     animate={{ x: ['-100%', '100%'] }}

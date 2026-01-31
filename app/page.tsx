@@ -17,7 +17,6 @@ import {
   Layers, 
   Map as MapIcon, 
   ShieldCheck, 
-  Activity, 
   Clock,
   Zap,
   ChevronRight
@@ -26,6 +25,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { WeatherResponse } from '@/types/weather'
 import { motion, AnimatePresence } from 'framer-motion'
 import dynamic from 'next/dynamic'
+import Image from 'next/image'
 
 // Lazy load the globe
 const WorldGlobe = dynamic(() => import('@/components/globe').then(m => m.WorldGlobe), {
@@ -120,8 +120,14 @@ export default function Home() {
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center gap-6"
           >
-            <div className="p-4 bg-gradient-to-br from-primary to-blue-800 rounded-[2rem] border border-white/20 shadow-[0_0_40px_rgba(59,130,246,0.3)] group cursor-pointer">
-              <Activity className="w-10 h-10 text-white animate-pulse" />
+            <div className="p-1 bg-gradient-to-br from-primary to-blue-800 rounded-[2rem] border border-white/20 shadow-[0_0_40px_rgba(59,130,246,0.3)] group cursor-pointer overflow-hidden">
+               <Image 
+                src="/app-icon.png" 
+                alt="Sayanocast Logo" 
+                width={72} 
+                height={72} 
+                className="w-16 h-16 object-cover rounded-[1.5rem]"
+              />
             </div>
             <div>
               <div className="flex items-center gap-3">
@@ -332,7 +338,7 @@ export default function Home() {
                   {/* Decorative Tactical Feed Fill */}
                   <div className="flex items-center justify-between px-4 py-2 bg-primary/5 border border-primary/10 rounded-full">
                      <div className="flex items-center gap-2">
-                        <Activity className="w-3 h-3 text-primary animate-pulse" />
+                        <Image src="/app-icon.png" alt="Network Node" width={12} height={12} className="w-3 h-3 object-cover rounded-full animate-pulse" />
                         <span className="text-[7px] font-black uppercase tracking-[0.3em] text-white/40">Network Node: Active</span>
                      </div>
                      <span className="text-[7px] font-mono text-primary/40">DS-{Math.random().toString(36).substring(7).toUpperCase()}</span>
@@ -383,7 +389,7 @@ export default function Home() {
                   <div className="glass-card p-5 rounded-[1.5rem] border-white/5 space-y-4">
                      <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                           <Activity className="w-4 h-4 text-primary animate-pulse" />
+                           <Image src="/app-icon.png" alt="Event Log" width={16} height={16} className="w-4 h-4 object-cover rounded-full animate-pulse" />
                            <h3 className="text-xs font-black uppercase tracking-widest">Event Log</h3>
                         </div>
                         <span className="text-[8px] font-black text-white/20 uppercase tracking-[0.2em]">Live Stream</span>
@@ -437,7 +443,13 @@ export default function Home() {
                              <div className="absolute inset-[-20px] bg-primary/20 blur-3xl rounded-full animate-pulse" />
                              <Loader2 className="w-40 h-40 text-primary animate-spin" />
                              <div className="absolute inset-0 flex items-center justify-center">
-                                 <Activity className="w-16 h-16 text-blue-400 animate-pulse" />
+                                 <Image 
+                                    src="/app-icon.png" 
+                                    alt="Loading Logo" 
+                                    width={64} 
+                                    height={64} 
+                                    className="w-16 h-16 object-cover rounded-2xl animate-pulse"
+                                  />
                              </div>
                           </div>
                           <div className="space-y-4">
@@ -465,7 +477,13 @@ export default function Home() {
                          <div className="w-40 h-40 bg-primary/5 rounded-[4rem] flex items-center justify-center border border-white/10 shadow-[0_0_100px_rgba(59,130,246,0.1)] group cursor-pointer hover:border-primary/50 transition-all duration-700">
                            <div className="relative">
                               <div className="absolute inset-0 bg-primary blur-3xl opacity-0 group-hover:opacity-40 transition-opacity" />
-                              <Wind className="w-20 h-20 text-primary group-hover:scale-110 transition-transform duration-700" />
+                               <Image 
+                                src="/app-icon.png" 
+                                alt="System Ready" 
+                                width={120} 
+                                height={120} 
+                                className="w-32 h-32 object-cover rounded-[2.5rem] group-hover:scale-110 transition-transform duration-700"
+                              />
                            </div>
                          </div>
                          <div className="space-y-6">
@@ -526,7 +544,13 @@ export default function Home() {
                 <div className="max-w-xl space-y-4">
                    <div className="flex items-center gap-3">
                       <div className={`p-2 rounded-lg ${data ? 'bg-primary/20' : 'bg-white/10'}`}>
-                         <Activity className={`w-5 h-5 ${data ? 'text-primary' : 'text-white/20'}`} />
+                         <Image 
+                            src="/app-icon.png" 
+                            alt="Pulse Icon" 
+                            width={20} 
+                            height={20} 
+                            className={`w-5 h-5 object-cover rounded-md ${data ? '' : 'opacity-20 grayscale'}`} 
+                          />
                       </div>
                       <span className="text-xs font-black uppercase tracking-[0.5em] text-white/20 italic">
                         {data ? 'Regional Pulse' : 'Global Surveillance Standby'}
@@ -628,8 +652,14 @@ export default function Home() {
            
            <div className="container mx-auto flex flex-col items-center gap-8 relative z-10">
               <div className="flex items-center gap-6 group cursor-pointer">
-                 <div className="p-5 bg-primary/10 rounded-[2rem] border border-primary/20 group-hover:border-primary/60 transition-all duration-500">
-                    <Activity className="w-12 h-12 text-primary group-hover:rotate-180 transition-transform duration-700" />
+                 <div className="p-1 bg-primary/10 rounded-[2rem] border border-primary/20 group-hover:border-primary/60 transition-all duration-500 overflow-hidden">
+                    <Image 
+                      src="/app-icon.png" 
+                      alt="Sayanocast Logo" 
+                      width={80} 
+                      height={80} 
+                      className="w-20 h-20 object-cover rounded-[1.5rem] group-hover:scale-110 transition-transform duration-700"
+                    />
                  </div>
                   <span className="font-black tracking-[0.8em] uppercase text-4xl italic bg-gradient-to-r from-white to-white/30 bg-clip-text text-transparent">SAYANOCAST</span>
               </div>

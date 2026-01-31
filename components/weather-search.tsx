@@ -1,7 +1,8 @@
 'use client'
+import Image from 'next/image'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { Search, MapPin, Loader2, Navigation, Compass, Activity, Clock, ChevronRight } from 'lucide-react'
+import { Search, MapPin, Loader2, Navigation, Compass, Clock, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -293,7 +294,7 @@ export function WeatherSearch({
                     <div className="relative">
                        <Loader2 className="w-16 h-16 text-primary animate-spin opacity-20" />
                        <div className="absolute inset-0 flex items-center justify-center">
-                          <Activity className="w-6 h-6 text-primary animate-pulse" />
+                          <Image src="/app-icon.png" alt="Scanning" width={24} height={24} className="w-6 h-6 object-cover rounded-md animate-pulse" />
                        </div>
                     </div>
                     <p className="text-[10px] font-black uppercase tracking-[1em] text-white/20 italic animate-pulse">Scanning...</p>

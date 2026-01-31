@@ -13,21 +13,8 @@ export const metadata: Metadata = {
   description: 'A premium, futuristic weather platform crafted by Sayan, providing real-time global intelligence and 3D visualizations.',
   generator: 'v0.app',
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
+    icon: '/app-icon.png',
+    apple: '/app-icon.png',
   },
 }
 
