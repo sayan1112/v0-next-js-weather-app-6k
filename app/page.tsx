@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { WeatherSearch } from '@/components/weather-search'
 import { WeatherCard } from '@/components/weather-card'
 import { ForecastCard } from '@/components/forecast-card'
@@ -57,7 +57,7 @@ export default function Home() {
     }
   }, [])
 
-  const fetchWeather = async (url: string) => {
+  const fetchWeather = async (url: string, retries = 2) => {
     setIsLoading(true)
     setError(null)
     
@@ -72,6 +72,15 @@ export default function Home() {
       setData(result)
       setSelectedLocation({ lat: result.location.lat, lng: result.location.lon })
     } catch (err: any) {
+      console.error('Weather fetch error:', err)
+      
+      // Retry logic for network errors
+      if (retries > 0 && err.message.includes('fetch')) {
+        console.log(`Retrying... (${retries} attempts left)`)
+        setTimeout(() => fetchWeather(url, retries - 1), 1000)
+        return
+      }
+      
       setError(err.message)
     } finally {
       setIsLoading(false)
@@ -82,8 +91,22 @@ export default function Home() {
     fetchWeather(`/api/v1/weather?city=${encodeURIComponent(city)}`)
   }
 
+  // Debounce globe clicks to prevent rapid API calls
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null)
+  
   const handleLocationSelect = (lat: number, lon: number) => {
-    fetchWeather(`/api/v1/weather?lat=${lat}&lon=${lon}`)
+    // Clear any pending requests
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current)
+    }
+    
+    // Update visual selection immediately for responsiveness
+    setSelectedLocation({ lat, lng: lon })
+    
+    // Debounce the actual API call
+    debounceTimerRef.current = setTimeout(() => {
+      fetchWeather(`/api/v1/weather?lat=${lat}&lon=${lon}`)
+    }, 500)
   }
 
   const handleUseLocation = () => {
