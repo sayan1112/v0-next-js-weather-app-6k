@@ -110,37 +110,25 @@ const GlobeInner = ({ onLocationSelect, selectedLocation }: GlobeInnerProps) => 
     if (!current) return;
 
     if (selectedLocation) {
-      // Target rotation to center the selected location
-      // Longitude controls Y-axis rotation (east-west)
+      // Rotate for Longitude (Y-axis)
       const targetY = -(selectedLocation.lng * (Math.PI / 180))
-      
-      // Latitude controls X-axis rotation (north-south)
-      // Negative because we want to tilt the globe to bring the point to center
-      const targetX = -(selectedLocation.lat * (Math.PI / 180))
-      
-      // Smooth interpolation for Y rotation (longitude)
       const currentY = current.rotation.y
-      let diffY = targetY - currentY
-      // Normalize to shortest path
-      while (diffY > Math.PI) diffY -= Math.PI * 2
-      while (diffY < -Math.PI) diffY += Math.PI * 2
+      let diffY = targetY - (currentY % (Math.PI * 2))
+      diffY = ((diffY + Math.PI) % (Math.PI * 2)) - Math.PI
       current.rotation.y += diffY * 0.08
 
-      // Smooth interpolation for X rotation (latitude)
+      // Rotate for Latitude (X-axis)
+      const targetX = (selectedLocation.lat * (Math.PI / 180))
       const currentX = current.rotation.x
-      let diffX = targetX - currentX
-      // Normalize to shortest path
-      while (diffX > Math.PI) diffX -= Math.PI * 2
-      while (diffX < -Math.PI) diffX += Math.PI * 2
+      let diffX = targetX - (currentX % (Math.PI * 2))
+      diffX = ((diffX + Math.PI) % (Math.PI * 2)) - Math.PI
       current.rotation.x += diffX * 0.08
     } else {
-      // Auto-rotate when no location selected
       current.rotation.y += 0.001
-      // Slowly return to equator view
+      // Slowly return to neutral X rotation
       current.rotation.x += (0 - current.rotation.x) * 0.02
     }
     
-    // Rotate cloud layer independently for realism
     if (cloudsRef.current) {
       cloudsRef.current.rotation.y += 0.0007
     }
@@ -152,36 +140,9 @@ const GlobeInner = ({ onLocationSelect, selectedLocation }: GlobeInnerProps) => 
     if (e.point) {
       const localPoint = new THREE.Vector3().copy(e.point)
       globeRef.current?.worldToLocal(localPoint)
-      
-      // Normalize the point to unit sphere
-      const length = Math.sqrt(
-        localPoint.x * localPoint.x + 
-        localPoint.y * localPoint.y + 
-        localPoint.z * localPoint.z
-      )
-      
-      const normalized = {
-        x: localPoint.x / length,
-        y: localPoint.y / length,
-        z: localPoint.z / length
-      }
-      
-      // Calculate latitude (elevation angle from equator)
-      // Y-axis represents north-south, range: -90 to +90
-      const lat = Math.asin(normalized.y) * (180 / Math.PI)
-      
-      // Calculate longitude (azimuth from prime meridian)
-      // Corrected formula: atan2(-z, x) for proper east-west mapping
-      // X-axis = 0° (prime meridian), rotation is counter-clockwise when viewed from north pole
-      const lng = Math.atan2(-normalized.z, normalized.x) * (180 / Math.PI)
-      
-      // Round to 3 decimal places for precision
-      const preciseLat = parseFloat(lat.toFixed(3))
-      const preciseLng = parseFloat(lng.toFixed(3))
-      
-      console.log(`Globe click: lat=${preciseLat}, lng=${preciseLng}`)
-      
-      if (onLocationSelect) onLocationSelect(preciseLat, preciseLng)
+      const lat = Math.asin(localPoint.y / globeRadius) * (180 / Math.PI)
+      const lng = -Math.atan2(localPoint.z, localPoint.x) * (180 / Math.PI)
+      if (onLocationSelect) onLocationSelect(lat, lng)
     }
   }
 
