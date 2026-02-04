@@ -6,7 +6,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ForecastDay } from '@/types/weather'
 import { motion } from 'framer-motion'
-import { Zap } from 'lucide-react'
+import { Zap, Thermometer } from 'lucide-react'
 
 interface WeatherChartsProps {
   data: ForecastDay[]
@@ -36,7 +36,7 @@ export function WeatherCharts({ data }: WeatherChartsProps) {
           <CardHeader className="p-10 relative z-10 flex flex-row items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-primary/20 rounded-2xl overflow-hidden">
-                 <Image src="/app-icon.png" alt="Thermal Icon" width={24} height={24} className="w-6 h-6 object-cover rounded-md" />
+                 <Thermometer className="w-6 h-6 text-primary" />
               </div>
               <CardTitle className="text-xl font-black uppercase italic tracking-tighter">Thermal Prediction (24H)</CardTitle>
             </div>

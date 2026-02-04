@@ -15,7 +15,8 @@ import {
   Thermometer, 
   Waves,
   Navigation,
-  Sun
+  Sun,
+  Radar
 } from 'lucide-react'
 
 interface WeatherCardProps {
@@ -56,12 +57,7 @@ export function WeatherCard({ data }: WeatherCardProps) {
         <CardContent className="p-6 relative z-10">
           {/* Top Decorative Ticker */}
           <div className="mb-6 flex items-center gap-4 overflow-hidden border-b border-white/5 pb-4">
-             <div className="flex gap-8 animate-marquee whitespace-nowrap">
-                {['ATMOSPHERIC_SCAN_ACTIVE', 'SIGNAL_SYNC_STABLE', 'METADATA_ENCRYPTED', 'SAYANOCAST_GLOBAL'].map(text => (
-                   <span key={text} className="text-[7px] font-black tracking-[0.4em] text-white/20">{text}</span>
-                ))}
-             </div>
-             <div className="flex gap-8 animate-marquee whitespace-nowrap" aria-hidden="true">
+             <div className="flex gap-8 whitespace-nowrap">
                 {['ATMOSPHERIC_SCAN_ACTIVE', 'SIGNAL_SYNC_STABLE', 'METADATA_ENCRYPTED', 'SAYANOCAST_GLOBAL'].map(text => (
                    <span key={text} className="text-[7px] font-black tracking-[0.4em] text-white/20">{text}</span>
                 ))}
@@ -107,13 +103,7 @@ export function WeatherCard({ data }: WeatherCardProps) {
           <div className="mt-8 relative h-12 bg-white/5 rounded-xl border border-white/5 overflow-hidden flex items-center px-4 group">
             <div className="absolute inset-y-0 left-0 w-1 bg-primary animate-pulse" />
             <div className="flex items-center gap-3 w-full">
-               <Image 
-                src="/app-icon.png" 
-                alt="Scan Icon" 
-                width={16} 
-                height={16} 
-                className="w-4 h-4 object-cover rounded-sm animate-pulse"
-              />
+               <Radar className="w-4 h-4 text-primary animate-pulse" />
                <div className="flex-1 h-[2px] bg-white/10 relative overflow-hidden">
                   <motion.div 
                     animate={{ x: ['-100%', '100%'] }}

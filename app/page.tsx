@@ -27,7 +27,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 
-// Lazy load the globe
+// Lazy load the globe with memoization
 const WorldGlobe = dynamic(() => import('@/components/globe').then(m => m.WorldGlobe), {
   ssr: false,
   loading: () => (
@@ -37,6 +37,8 @@ const WorldGlobe = dynamic(() => import('@/components/globe').then(m => m.WorldG
   )
 })
 
+const MemoizedWorldGlobe = React.memo(WorldGlobe)
+
 export default function Home() {
   const [data, setData] = useState<WeatherResponse | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -44,6 +46,7 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<'forecast' | 'charts' | 'intelligence'>('forecast')
   const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [timeStep, setTimeStep] = useState(0) // 0-24 for hourly scrub
+  const [viewMode, setViewMode] = useState<'dashboard' | 'map'>('dashboard')
 
   // System Calibration on Mount
   useEffect(() => {
@@ -109,7 +112,6 @@ export default function Home() {
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-primary/5 blur-[160px] rounded-full" />
         <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-blue-900/10 blur-[160px] rounded-full" />
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
       </div>
 
       <div className="relative z-10 flex flex-col min-h-screen">
@@ -188,12 +190,19 @@ export default function Home() {
             
             {/* LEFT: MASTER GLOBE CONSOLE */}
             <motion.div 
+              layout
               initial={{ opacity: 0, scale: 0.99 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="lg:col-span-12 xl:col-span-8 space-y-6"
+              animate={{ 
+                opacity: 1, 
+                scale: 1,
+              }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className={`${viewMode === 'map' ? 'lg:col-span-12 xl:col-span-12 z-[200]' : 'lg:col-span-12 xl:col-span-8'} space-y-6 relative`}
             >
-              <div className="relative glass-card rounded-[2rem] border-white/10 overflow-hidden h-[400px] lg:h-[500px] shadow-[0_20px_40px_-10px_rgba(0,0,0,1)] bg-[#010208]">
-                {/* Tactical Scan Overlay - Fills Blank Void when loading/failed */}
+              <div className={`relative glass-card rounded-[2rem] border-white/10 overflow-hidden shadow-[0_20px_40px_-10px_rgba(0,0,0,1)] bg-[#010208] transition-all duration-700 ${
+                viewMode === 'map' ? 'h-[85vh]' : 'h-[400px] lg:h-[500px]'
+              }`}>
+                {/* Tactical Scan Overlay */}
                 <div className="absolute inset-0 z-0 flex items-center justify-center opacity-10">
                    <div className="w-full h-full" style={{ 
                      backgroundImage: 'radial-gradient(circle, #3b82f6 1px, transparent 1px)', 
@@ -202,18 +211,30 @@ export default function Home() {
                 </div>
                 
                 <div className="absolute inset-0 z-0">
-                  <WorldGlobe onLocationSelect={handleLocationSelect} selectedLocation={selectedLocation} />
+                  <MemoizedWorldGlobe 
+                    onLocationSelect={handleLocationSelect} 
+                    selectedLocation={selectedLocation}
+                    selectedLocationName={data?.location?.name}
+                  />
                 </div>
                 
                 {/* Tactical Overlays */}
-                <div className="absolute top-6 left-6 z-10 space-y-3 max-w-[280px]">
-                  <div className="glass-card p-4 rounded-2xl border-white/10 backdrop-blur-md bg-black/40">
-                    <div className="flex items-center gap-2 mb-2">
-                       <div className="w-2 h-2 rounded-full bg-primary animate-ping" />
-                       <h3 className="text-sm font-black uppercase italic tracking-wider">Live Earth Console</h3>
+                <div className="absolute top-6 left-6 z-10 space-y-3 max-w-[320px]">
+                  <div className="glass-card p-4 rounded-2xl border-white/10 backdrop-blur-md bg-black/40 shadow-2xl">
+                    <div className="flex items-center justify-between mb-2">
+                       <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full bg-primary animate-ping" />
+                          <h3 className="text-sm font-black uppercase italic tracking-wider">Tactical Map Engine</h3>
+                       </div>
+                       <button 
+                        onClick={() => setViewMode(viewMode === 'map' ? 'dashboard' : 'map')}
+                        className="p-1 px-2 bg-primary/20 hover:bg-primary/40 rounded-lg border border-primary/40 text-[9px] font-black uppercase transition-all"
+                       >
+                         {viewMode === 'map' ? 'Exit Map' : 'Expnd View'}
+                       </button>
                     </div>
                     <p className="text-[10px] text-white/40 leading-relaxed uppercase font-bold">
-                       Interactive Global Surface Modeling. Vector selection active.
+                       {viewMode === 'map' ? 'Full scale orbital surveillance active. Precision vectoring enabled.' : 'Interactive Global Surface Modeling. Vector selection active.'}
                     </p>
                     <div className="grid grid-cols-2 gap-3 mt-3 pt-3 border-t border-white/10">
                        <div>
@@ -221,15 +242,15 @@ export default function Home() {
                           <p className="text-[9px] font-black italic text-primary">SPHERICAL 3D</p>
                        </div>
                        <div>
-                          <p className="text-[7px] text-white/20 uppercase font-black">Precision</p>
-                          <p className="text-[9px] font-black italic text-primary">0.001 VECTORS</p>
+                          <p className="text-[7px] text-white/20 uppercase font-black">Labels</p>
+                          <p className="text-[9px] font-black italic text-primary">ADMIN-1 SYNC</p>
                        </div>
                     </div>
                   </div>
                   
-                  <div className="flex gap-2">
-                    {['Atmospheric', 'Wind-Flow', 'Heatmap'].map(layer => (
-                      <button key={layer} className="px-3 py-1.5 bg-white/5 hover:bg-primary/20 border border-white/10 rounded-full text-[8px] font-black uppercase tracking-widest transition-all">
+                  <div className={`flex gap-2 transition-opacity duration-500 ${viewMode === 'map' ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                    {['Borders', 'Topography', 'Population', 'Climatology'].map(layer => (
+                      <button key={layer} className="px-3 py-1.5 bg-black/60 hover:bg-primary/20 border border-white/10 rounded-full text-[8px] font-black uppercase tracking-widest transition-all backdrop-blur-md">
                         {layer}
                       </button>
                     ))}
@@ -239,11 +260,19 @@ export default function Home() {
                 <div className="absolute bottom-6 left-6 z-10 flex items-center gap-4">
                    <div className="px-4 py-2 bg-black/60 backdrop-blur-md rounded-full border border-white/10 flex items-center gap-2">
                       <Zap className="w-3 h-3 text-primary" />
-                      <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60">Orbital Data Stream: OK</span>
+                      <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60">
+                        {viewMode === 'map' ? 'Satellite Uplink: HD Stream' : 'Orbital Data Stream: OK'}
+                      </span>
                    </div>
                 </div>
 
-                <div className="absolute bottom-6 right-6 z-10 flex items-center gap-4">
+                <div className="absolute bottom-6 right-6 z-10 flex flex-col items-end gap-3">
+                   {viewMode === 'map' && (
+                     <div className="p-4 glass-card rounded-2xl border-white/10 bg-black/40 backdrop-blur-xl mb-2 animate-in slide-in-from-right-10">
+                        <p className="text-[8px] text-white/40 uppercase font-black mb-1">Local Resolution</p>
+                        <p className="text-xl font-black italic text-white uppercase tracking-tighter">Precise-Grid 7</p>
+                     </div>
+                   )}
                    <div className="px-4 py-2 bg-black/60 backdrop-blur-md rounded-full border border-white/10 flex items-center gap-2">
                       <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />
                       <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60">Polar Drift: Stabilized</span>
@@ -251,7 +280,7 @@ export default function Home() {
                 </div>
               </div>
 
-                {data && (
+                {data && viewMode === 'dashboard' && (
                   <>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {/* TIME SCRUBBER SIMULATION */}

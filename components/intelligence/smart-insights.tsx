@@ -4,7 +4,7 @@ import Image from 'next/image'
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Card, CardContent } from '@/components/ui/card'
-import { Camera, Plane, Navigation, CheckCircle2, AlertTriangle, XCircle } from 'lucide-react'
+import { Camera, Plane, Navigation, CheckCircle2, AlertTriangle, XCircle, Activity } from 'lucide-react'
 import { WeatherIntelligence, DecisionInsight } from '@/types/weather'
 
 interface SmartInsightsProps {
@@ -12,7 +12,7 @@ interface SmartInsightsProps {
 }
 
 const RunningIcon = ({ className }: { className?: string }) => (
-  <Image src="/app-icon.png" alt="Running icon" width={20} height={20} className={`${className} object-cover rounded-md`} />
+  <Activity className={className} />
 )
 
 export function SmartInsights({ insights }: SmartInsightsProps) {
