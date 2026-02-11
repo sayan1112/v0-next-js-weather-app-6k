@@ -37,6 +37,13 @@ export default function RootLayout({
           {children}
           <Analytics />
         </ThemeProvider>
+        {/* Google Maps API for advanced geospatial intelligence and location accuracy */}
+        <script 
+          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY || ''}&libraries=places&callback=initMap`} 
+          async 
+          defer 
+        />
+
       </body>
     </html>
   )

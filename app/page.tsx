@@ -8,6 +8,7 @@ import { WeatherCharts } from '@/components/weather-charts'
 import { ExplainableWeather } from '@/components/intelligence/explainable-weather'
 import { SmartInsights } from '@/components/intelligence/smart-insights'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { GoogleMap } from '@/components/google-map'
 import { 
   AlertCircle, 
   Loader2, 
@@ -211,11 +212,38 @@ export default function Home() {
                 </div>
                 
                 <div className="absolute inset-0 z-0">
-                  <MemoizedWorldGlobe 
-                    onLocationSelect={handleLocationSelect} 
-                    selectedLocation={selectedLocation}
-                    selectedLocationName={data?.location?.name}
-                  />
+                  <AnimatePresence mode="wait">
+                    {viewMode === 'map' && selectedLocation ? (
+                      <motion.div
+                        key="google-map"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="w-full h-full"
+                      >
+                        <GoogleMap 
+                          lat={selectedLocation.lat} 
+                          lng={selectedLocation.lng} 
+                          zoom={10}
+                        />
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="world-globe"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="w-full h-full"
+                      >
+                        <MemoizedWorldGlobe 
+                          onLocationSelect={handleLocationSelect} 
+                          selectedLocation={selectedLocation}
+                          selectedLocationName={data?.location?.name}
+                          setViewMode={setViewMode}
+                        />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
                 
                 {/* Tactical Overlays */}
@@ -226,12 +254,6 @@ export default function Home() {
                           <div className="w-2 h-2 rounded-full bg-primary animate-ping" />
                           <h3 className="text-sm font-black uppercase italic tracking-wider">Tactical Map Engine</h3>
                        </div>
-                       <button 
-                        onClick={() => setViewMode(viewMode === 'map' ? 'dashboard' : 'map')}
-                        className="p-1 px-2 bg-primary/20 hover:bg-primary/40 rounded-lg border border-primary/40 text-[9px] font-black uppercase transition-all"
-                       >
-                         {viewMode === 'map' ? 'Exit Map' : 'Expnd View'}
-                       </button>
                     </div>
                     <p className="text-[10px] text-white/40 leading-relaxed uppercase font-bold">
                        {viewMode === 'map' ? 'Full scale orbital surveillance active. Precision vectoring enabled.' : 'Interactive Global Surface Modeling. Vector selection active.'}
@@ -248,6 +270,16 @@ export default function Home() {
                     </div>
                   </div>
                   
+                  {viewMode === 'map' && (
+                    <button 
+                      onClick={() => setViewMode('dashboard')}
+                      className="absolute top-6 right-6 z-50 bg-red-600/80 hover:bg-red-500 border border-red-400/50 px-6 py-3 rounded-full text-xs font-black uppercase tracking-[0.2em] transition-all duration-300 backdrop-blur-md shadow-[0_0_20px_rgba(239,68,68,0.4)] active:scale-95 flex items-center gap-2"
+                    >
+                      <AlertCircle className="w-4 h-4" />
+                      Exit Recon
+                    </button>
+                  )}
+
                   <div className={`flex gap-2 transition-opacity duration-500 ${viewMode === 'map' ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
                     {['Borders', 'Topography', 'Population', 'Climatology'].map(layer => (
                       <button key={layer} className="px-3 py-1.5 bg-black/60 hover:bg-primary/20 border border-white/10 rounded-full text-[8px] font-black uppercase tracking-widest transition-all backdrop-blur-md">

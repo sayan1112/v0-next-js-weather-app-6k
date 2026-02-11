@@ -14,6 +14,13 @@ interface Suggestion {
   country: string;
   lat: number;
   lon: number;
+  source?: string;
+}
+
+declare global {
+  interface Window {
+    google: any;
+  }
 }
 
 interface WeatherSearchProps {
